@@ -1,5 +1,4 @@
 // Includes All PROS Header And C++ Files
-#include "main.h"
 #include "robot.h"
 #include "autonamous.h"
 
