@@ -1,8 +1,4 @@
 // Includes Main, Screen, Robot, And PROS LVGL Header Files
-#include "liblvgl/core/lv_obj.h"
-#include "liblvgl/core/lv_obj_pos.h"
-#include "liblvgl/core/lv_obj_style.h"
-#include "liblvgl/widgets/lv_label.h"
 #include "main.h"
 #include "screen.h"
 #include "robot.h"
