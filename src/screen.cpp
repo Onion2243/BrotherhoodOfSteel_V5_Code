@@ -5,13 +5,15 @@
 #include "pros/apix.h"
 
 // THIS IS PURELY FOR INTELLISENSE, IN ORDER FOR BUIDLING TO WORK IT MUST BE COMMENTED OUT
-//#include "include/liblvgl/lvgl.h" 
+// #include "include/liblvgl/lvgl.h" 
 
 // Variables 
 char AutonResult[32]; // AutonResult Variable, Which Will Store The Selected Auton Mode As A String (Can Only Hold 32 Characters)
 lv_obj_t * AutonChangedLabel = nullptr; // Creates The AutonChangedLabel
 lv_obj_t * Battery_Arc = nullptr; // Creates The Battery Arc Object
 lv_obj_t * Battery_Label = nullptr; // Creates The Battery Label Object
+lv_obj_t * Drivetrain_Temp_Arc = nullptr; // Creates The Drivetrain Temperature Arc Object
+lv_obj_t * Drivetrain_Temp_Label = nullptr; // Creates The Drivetrain Temperature Label Object
 
 
 // Initalizes The Brain Screen To Work With LVGL
@@ -71,6 +73,32 @@ void BatteryPercentage()
     }
 }
 
+// Gets The Average Temperature Of The Drivetrain Motors And Updates The Drivetrain Temperature Arc On The Screen
+void DrivetrainTemperature()
+{
+    // Runs Forever While The Program Is Running
+    while (true)
+    {
+        // Get Temperatures Of All Motors In The Drivetrain Motor Groups
+        std::vector<double> left_mg_temps = left_mg.get_temperature_all(); // Gets The Temperatures Of All Motors In The Left Motor Group
+        std::vector<double> right_mg_temps = right_mg.get_temperature_all(); // Gets The Temperatures Of All Motors In The Right Motor Group
+
+        // Calculate Average Temperature Of The Drivetrain Motors
+        int AddedTemps = left_mg_temps[0] + left_mg_temps[1] + right_mg_temps[0] + right_mg_temps[1]; // Adds All The Motor Temperatures Together
+        int AverageTemp = AddedTemps / 4; // Calculates The Average Temperature Of The Drivetrain Motors
+
+        // Update LVGL Objects
+        lv_arc_set_value(Drivetrain_Temp_Arc, AverageTemp); // Updates The Drivetrain Temperature Arc To Reflect The Current Average Temperature
+        
+        // Convert The Temperature To A String For The Label And Update It
+        char drivetrainTempString[32]; // Buffer Variable To Hold The Drivetrain Temperature As A String
+        snprintf(drivetrainTempString, sizeof(drivetrainTempString), "%dC", AverageTemp); // Formats The Drivetrain Temperature As A String With Celsius Sign
+        lv_label_set_text(Drivetrain_Temp_Label, drivetrainTempString); // Updates The Drivetrain Temperature Label To Show The Current Average Temperature
+
+        pros::delay(500); // Delay For 1 Second Before Updating Again
+    }
+}
+
 // This Function Will House All Of The Code For The Screen And Its Logic
 void UpdateScreen()
 {   
@@ -82,7 +110,7 @@ void UpdateScreen()
 
     // Auton Changed Label
     AutonChangedLabel = lv_label_create(lv_scr_act()); // Creates The AutonChangedLabel On The Active Screen
-    lv_label_set_text(AutonChangedLabel, "No Auton Selected"); // Updates The Label To Show The Selected Auton Mode
+    lv_label_set_text(AutonChangedLabel, "Selected Auton: Auton Left"); // Updates The Label To Show The Selected Auton Mode
     lv_obj_align(AutonChangedLabel, LV_ALIGN_BOTTOM_MID, 0, -4); // Aligns The Selected Auton Label To The Bottom Middle Of The Screen
 
     // Battery Arc
@@ -99,5 +127,20 @@ void UpdateScreen()
     Battery_Label = lv_label_create(lv_scr_act()); // Creates The Battery Label On The Active Screen
     lv_obj_align_to(Battery_Label, Battery_Arc, LV_ALIGN_BOTTOM_MID, 0, 3); // Aligns The Battery Label To The Bottom Middle Of The Battery Arc
 
+    // Drivetrain Temperature Arc
+    Drivetrain_Temp_Arc = lv_arc_create(lv_scr_act()); // Creates The Drivetrain Temperature Arc On The Active Screen
+    lv_obj_set_size(Drivetrain_Temp_Arc, 100, 100); // Sets The Size Of The Drivetrain Temperature Arc To 100x100 Pixels
+    lv_arc_set_rotation(Drivetrain_Temp_Arc, 135); // Sets The Rotation Of The Arc To 135 Degrees
+    lv_arc_set_bg_angles(Drivetrain_Temp_Arc, 0, 270); // Sets The Maximum Angle Of The Arc To 270 Degrees
+    lv_arc_set_range(Drivetrain_Temp_Arc, 0, 100); // Sets The Range Of Values For The Arc Between 0 And 100
+    lv_obj_remove_style(Drivetrain_Temp_Arc, NULL, LV_PART_KNOB); // Removes The Knob Style From The Arc
+    lv_obj_clear_flag(Drivetrain_Temp_Arc, LV_OBJ_FLAG_CLICKABLE); // Stops The Arc From Being Clickable And Adjustable
+    lv_obj_align(Drivetrain_Temp_Arc, LV_ALIGN_TOP_MID, 0, 6); // Aligns The Arc To The Appropriate Position On The Screen
+
+    // Drivetrain Temperature Label
+    Drivetrain_Temp_Label = lv_label_create(lv_scr_act()); // Creates The Drivetrain Temperature Label On The Active Screen
+    lv_obj_align_to(Drivetrain_Temp_Label, Drivetrain_Temp_Arc, LV_ALIGN_BOTTOM_MID, 0, 3); // Aligns The Drivetrain Temperature Label To The Bottom Middle Of The Drivetrain Temperature Arc
+
     pros::Task BatteryPercentageTask(BatteryPercentage); // Starts The Battery Percentage Task To Continuosely Update The Battery Arc
+    pros::Task DrivetrainTemperatureTask(DrivetrainTemperature); // Starts The Drivetrain Temperature Task To Continuosely Update The Drivetrain Temperature Arc
 }

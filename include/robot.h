@@ -15,17 +15,25 @@ extern bool autonamous_skills;
 extern pros::Controller master;
 extern pros::MotorGroup left_mg;
 extern pros::MotorGroup right_mg;
-extern pros::Motor Rotate_Intake_Front;
-extern pros::Motor Rotate_Intake_Back_And_Track;
-extern pros::Motor Rotate_Tongue_Mech;
-extern pros::Motor Rotate_TopGoalMech_One;
-extern pros::Motor Rotate_TopGoalMech_Two;
+extern pros::Motor Rotate_Intake_And_Belt_Motor_One;
+extern pros::Motor Rotate_Intake_And_Belt_Motor_Two;
+extern pros::Motor Rotate_Outtake_Gears;
+extern pros::Motor Rotate_Matchloader;
 
+// All Pneumatics Used On The Robot Are Declared Here
+extern pros::ADIDigitalOut Descoring_Piston;
+extern pros::ADIDigitalOut Outtake_Piston_One;
+extern pros::ADIDigitalOut Outtake_Piston_Two;
+
+// All Lemlib Objects Are Declared Here
 extern lemlib::Drivetrain drivetrain;
 extern lemlib::OdomSensors sensors;
 extern lemlib::ControllerSettings lateral_controller;
 extern lemlib::ControllerSettings angular_controller;
 extern lemlib::Chassis chassis;
+
+// All Sensors Are Declared Here
+extern pros::Imu Inertial_Sensor;
 
 void InitLemLib(void);
 
