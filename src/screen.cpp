@@ -14,7 +14,10 @@ lv_obj_t * Battery_Arc = nullptr; // Creates The Battery Arc Object
 lv_obj_t * Battery_Label = nullptr; // Creates The Battery Label Object
 lv_obj_t * Drivetrain_Temp_Arc = nullptr; // Creates The Drivetrain Temperature Arc Object
 lv_obj_t * Drivetrain_Temp_Label = nullptr; // Creates The Drivetrain Temperature Label Object
-
+static lv_style_t dropdown_style; // Style For The Dropdown Menu
+static lv_style_t label_style; // Style For The Labels
+static lv_style_t arc_style; // Style For The Arcs
+static lv_style_t background_style; // Style For The Background
 
 // Initalizes The Brain Screen To Work With LVGL
 void InitBrainScreen()
@@ -99,11 +102,36 @@ void DrivetrainTemperature()
     }
 }
 
+// This Function Will Initalize And Set Up All Styles Used On The Screen
+void InitStyles()
+{
+    // Background Style
+    lv_style_init(&background_style); // Initializes The Background Style
+    lv_style_set_bg_color(&background_style, lv_color_hex(0x00400C)); // Sets The Background Color To Dark Green (Pipboy Dark Green)
+
+    // Arc Style
+    lv_style_init(&arc_style);
+    lv_style_set_arc_color(&arc_style, lv_color_hex(0x00AB16)); // Sets The Arc Color To Green (Pipboy Green)
+
+    // Label Style
+    lv_style_init(&label_style);
+    lv_style_set_text_font(&label_style, &lv_font_montserrat_14); // Sets The Label Font To Montserrat 14
+
+    // Dropdown Style
+    lv_style_init(&dropdown_style);
+}
+
 // This Function Will House All Of The Code For The Screen And Its Logic
 void UpdateScreen()
 {   
+    InitStyles(); // Initializes All The Styles Used On The Screen
+
+    // Set Background Style
+    lv_obj_add_style(lv_scr_act(), &background_style, 0); // Adds The Background Style To The Active Screen
+
     // Auton Dropdown Menu
     lv_obj_t * AutonDropDown = lv_dropdown_create(lv_scr_act()); // Creates The Dropdown Menu On The Active Screen
+    lv_obj_add_style(AutonDropDown, &dropdown_style, 0); // Adds The Dropdown Style To The Dropdown Menu
     lv_dropdown_set_options(AutonDropDown, "Auton Left\nAuton Right\nAuton Skills"); // Sets The Options For The Dropdown Menu
     lv_obj_align(AutonDropDown, LV_ALIGN_TOP_RIGHT, -2, 2); // Aligns The AutonDropdown To The Top Right Of The Screen
     lv_obj_add_event_cb(AutonDropDown, EventHandler, LV_EVENT_ALL, NULL); // Creates The Event Callback For The Dropdown Menu
@@ -112,9 +140,12 @@ void UpdateScreen()
     AutonChangedLabel = lv_label_create(lv_scr_act()); // Creates The AutonChangedLabel On The Active Screen
     lv_label_set_text(AutonChangedLabel, "Selected Auton: Auton Left"); // Updates The Label To Show The Selected Auton Mode
     lv_obj_align(AutonChangedLabel, LV_ALIGN_BOTTOM_MID, 0, -4); // Aligns The Selected Auton Label To The Bottom Middle Of The Screen
+    lv_obj_add_style(AutonChangedLabel, &label_style, 0); // Adds A Label Style To The Auton Changed Label
+
 
     // Battery Arc
     Battery_Arc = lv_arc_create(lv_scr_act()); // Creates The Battery Arc On The Active Screen
+    lv_obj_add_style(Battery_Arc, &arc_style, 0); // Adds The Arc Style To The Battery Arc
     lv_obj_set_size(Battery_Arc, 100, 100); // Sets The Size Of The Battery Arc To 50x50 Pixels
     lv_arc_set_rotation(Battery_Arc, 135); // Sets The Rotation Of The Arc To 180 By Default
     lv_arc_set_bg_angles(Battery_Arc, 0, 270); // Sets The Maximum Angle Of The Arc To 270 Degrees
@@ -123,12 +154,19 @@ void UpdateScreen()
     lv_obj_clear_flag(Battery_Arc, LV_OBJ_FLAG_CLICKABLE); // Stops The Arc From Being Clickable And Adjustable
     lv_obj_align(Battery_Arc, LV_ALIGN_TOP_LEFT, 5, 6); // Aligns The Arc To The Appropriate Position On The Screen
 
+
     // Battery Label
     Battery_Label = lv_label_create(lv_scr_act()); // Creates The Battery Label On The Active Screen
+    lv_obj_add_style(Battery_Label, &label_style, 0); // Adds The Label Style To The Battery Label
     lv_obj_align_to(Battery_Label, Battery_Arc, LV_ALIGN_BOTTOM_MID, 0, 3); // Aligns The Battery Label To The Bottom Middle Of The Battery Arc
+
+    lv_obj_t* BatteryImage = lv_img_create(lv_scr_act());
+    lv_img_set_src(BatteryImage, &Battery); // Sets The Source Of The Image To The Battery Image
+    lv_obj_align_to(BatteryImage, Battery_Arc, LV_ALIGN_TOP_MID, 0, -5); // Aligns The Battery Image To The Top Middle Of The Battery Arc
 
     // Drivetrain Temperature Arc
     Drivetrain_Temp_Arc = lv_arc_create(lv_scr_act()); // Creates The Drivetrain Temperature Arc On The Active Screen
+    lv_obj_add_style(Drivetrain_Temp_Arc, &arc_style, 0); // Adds The Arc Style To The Drivetrain Temperature Arc
     lv_obj_set_size(Drivetrain_Temp_Arc, 100, 100); // Sets The Size Of The Drivetrain Temperature Arc To 100x100 Pixels
     lv_arc_set_rotation(Drivetrain_Temp_Arc, 135); // Sets The Rotation Of The Arc To 135 Degrees
     lv_arc_set_bg_angles(Drivetrain_Temp_Arc, 0, 270); // Sets The Maximum Angle Of The Arc To 270 Degrees
@@ -140,6 +178,8 @@ void UpdateScreen()
     // Drivetrain Temperature Label
     Drivetrain_Temp_Label = lv_label_create(lv_scr_act()); // Creates The Drivetrain Temperature Label On The Active Screen
     lv_obj_align_to(Drivetrain_Temp_Label, Drivetrain_Temp_Arc, LV_ALIGN_BOTTOM_MID, 0, 3); // Aligns The Drivetrain Temperature Label To The Bottom Middle Of The Drivetrain Temperature Arc
+    lv_obj_add_style(Drivetrain_Temp_Label, &label_style, 0); // Adds The Label Style To The Drivetrain Temperature Label
+
 
     pros::Task BatteryPercentageTask(BatteryPercentage); // Starts The Battery Percentage Task To Continuosely Update The Battery Arc
     pros::Task DrivetrainTemperatureTask(DrivetrainTemperature); // Starts The Drivetrain Temperature Task To Continuosely Update The Drivetrain Temperature Arc
