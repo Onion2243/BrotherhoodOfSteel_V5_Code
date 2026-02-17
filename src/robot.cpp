@@ -8,19 +8,18 @@ bool autonamous_skills = false;
 
 // All Motors Used On The Robot Are Declared Here
 pros::Controller master(pros::E_CONTROLLER_MASTER); // Creates The Master Controller
-pros::MotorGroup left_mg({-11, 6, -12}, pros::MotorGearset::blue);    // Creates a motor group with forwards ports -11 & -20 and reversed port 2
-pros::MotorGroup right_mg({13, -5, 14}, pros::MotorGearset::blue);  // Creates a motor group with forwards port 5 and reversed ports 1 & 10
-pros::Motor Rotate_Intake_And_Belt_Motor_One (20); // Creates A Motor On Port 20 For Rotating The Front Intake
-pros::Motor Rotate_Intake_And_Belt_Motor_Two (19); // Creates A Motor On Port 19 Which Rotates The Back Intake And The Belt
-pros::Motor Rotate_Outtake_Gears (1); // Creates A Motor On Port 17 Which Rotates The Outtake Gears
-pros::Motor Rotate_Matchloader (15); // Creates A Motor On Port 15 Which Rotates The Matchloader
+pros::MotorGroup left_mg({-10, 6, -20}, pros::MotorGearset::blue);    // Creates a motor group with forwards ports -11 & -20 and reversed port 2
+pros::MotorGroup right_mg({11, -5, 3}, pros::MotorGearset::blue);  // Creates a motor group with forwards port 5 and reversed ports 1 & 10
+pros::Motor Rotate_Intake_And_Belt_Motor_One (19); // Creates A Motor On Port 20 For Rotating The Front Intake
+pros::Motor Rotate_Intake_And_Belt_Motor_Two (12); // Creates A Motor On Port 19 Which Rotates The Back Intake And The Belt
+pros::Motor Rotate_Matchloader (5); // Creates A Motor On Port 15 Which Rotates The Matchloader
 
 // All Pneumatics Used On The Robot Are Declared Here
-pros::ADIDigitalOut Descoring_Piston('A'); // Creates The Descoring Piston On Port A
-pros::ADIDigitalOut Outtake_Piston_One('B'); // Creates The First Outtake Piston On Port B
-pros::ADIDigitalOut Outtake_Piston_Two('C'); // Creates The Second Outtake Piston On Port C
+pros::ADIDigitalOut Outtake_Piston('A'); // Creates The Outtake Piston On Port A
+pros::ADIDigitalOut Descoring_Piston_Top('B'); // Creates The Descoring Piston On Port B
+pros::ADIDigitalOut Descoring_Piston_Bottom('C'); // Creates The Descoring Piston On Port C
 
-pros::Imu Inertial_Sensor(7); // Creates The Inertial Sensor On Port 7
+pros::Imu Inertial_Sensor(1); // Creates The Inertial Sensor On Port 7
 
 // Drivetrain Configuration For LemLib Chassis
 lemlib::Drivetrain drivetrain(&left_mg, // left motor group

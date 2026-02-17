@@ -1,5 +1,4 @@
 // Includes Main, Screen, Robot, And PROS LVGL Header Files
-#include "liblvgl/widgets/lv_img.h"
 #include "main.h"
 #include "screen.h"
 #include "robot.h"
@@ -18,8 +17,7 @@ lv_obj_t * Drivetrain_Temp_Label = nullptr; // Creates The Drivetrain Temperatur
 static lv_style_t dropdown_style; // Style For The Dropdown Menu
 static lv_style_t label_style; // Style For The Labels
 static lv_style_t arc_style; // Style For The Arcs
-static lv_style_t background_style; // Style For The Background
-lv_obj_t* Battery_Image; // Creates The Battery Image Object
+static lv_style_t background_style; // Style For The Background 
 
 // Initalizes The Brain Screen To Work With LVGL
 void InitBrainScreen()
@@ -109,31 +107,23 @@ void InitStyles()
 {
     // Background Style
     lv_style_init(&background_style); // Initializes The Background Style
-    lv_style_set_bg_color(&background_style, lv_color_hex(0x001B0A )); // Sets The Background Color
+    lv_style_set_bg_color(&background_style, lv_color_hex(0x00400C)); // Sets The Background Color To Dark Green (Pipboy Dark Green)
 
     // Arc Style
-    lv_obj_set_style_arc_color(Battery_Arc, lv_color_hex(0x00FF41), LV_PART_MAIN); // Sets The Main Arc Color For Battery Arc
-    lv_obj_set_style_arc_color(Battery_Arc, lv_color_hex(0x007A1C), LV_PART_INDICATOR); // Sets The Indicator Arc Color For Battery Arc
-    lv_obj_set_style_arc_color(Drivetrain_Temp_Arc, lv_color_hex(0x00FF41), LV_PART_MAIN); // Sets The Main Arc Color For Drivetrain Temp Arc
-    lv_obj_set_style_arc_color(Drivetrain_Temp_Arc, lv_color_hex(0x007A1C), LV_PART_INDICATOR); // Sets The Indicator Arc Color For Drivetrain Temp Arc
-    
+    lv_style_init(&arc_style);
+    lv_style_set_arc_color(&arc_style, lv_color_hex(0x00AB16)); // Sets The Arc Color To Green (Pipboy Green)
 
     // Label Style
     lv_style_init(&label_style);
     lv_style_set_text_font(&label_style, &lv_font_montserrat_14); // Sets The Label Font To Montserrat 14
-    lv_style_set_text_color(&label_style, lv_color_hex(0x00a82a)); // Sets The Label Text Color
 
     // Dropdown Style
     lv_style_init(&dropdown_style);
-    lv_style_set_bg_color(&dropdown_style, lv_color_hex(0x00FF41)); // Sets The Dropdown Background Color
-    lv_style_set_text_color(&dropdown_style, lv_color_hex(0x00a82a)); // Sets The Dropdown Main Text Color
 }
 
 // This Function Will House All Of The Code For The Screen And Its Logic
 void UpdateScreen()
 {   
-    InitStyles(); // Initializes All The Styles Used On The Screen
-
     // Set Background Style
     lv_obj_add_style(lv_scr_act(), &background_style, 0); // Adds The Background Style To The Active Screen
 
@@ -168,12 +158,6 @@ void UpdateScreen()
     lv_obj_add_style(Battery_Label, &label_style, 0); // Adds The Label Style To The Battery Label
     lv_obj_align_to(Battery_Label, Battery_Arc, LV_ALIGN_BOTTOM_MID, 0, 3); // Aligns The Battery Label To The Bottom Middle Of The Battery Arc
 
-    LV_IMG_DECLARE(Battery)
-    lv_obj_t* BatteryImageObj = lv_img_create(lv_scr_act());
-    lv_img_set_src(BatteryImageObj, &Battery); // Sets The Source Of The Image To The Battery Image
-    lv_obj_set_size(BatteryImageObj, 480, 272); // Sets The Size Of The Image To Fit Appropriatly On The Screen
-    lv_obj_align_to(BatteryImageObj, Battery_Arc, LV_ALIGN_TOP_MID, 0, -5); // Aligns The Battery Image To The Top Middle Of The Battery Arc
-
     // Drivetrain Temperature Arc
     Drivetrain_Temp_Arc = lv_arc_create(lv_scr_act()); // Creates The Drivetrain Temperature Arc On The Active Screen
     lv_obj_add_style(Drivetrain_Temp_Arc, &arc_style, 0); // Adds The Arc Style To The Drivetrain Temperature Arc
@@ -193,4 +177,6 @@ void UpdateScreen()
 
     pros::Task BatteryPercentageTask(BatteryPercentage); // Starts The Battery Percentage Task To Continuosely Update The Battery Arc
     pros::Task DrivetrainTemperatureTask(DrivetrainTemperature); // Starts The Drivetrain Temperature Task To Continuosely Update The Drivetrain Temperature Arc
+    InitStyles(); // Initializes All The Styles Used On The Screen
+
 }

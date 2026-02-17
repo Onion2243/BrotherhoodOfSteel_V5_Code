@@ -17,13 +17,12 @@ extern pros::MotorGroup left_mg;
 extern pros::MotorGroup right_mg;
 extern pros::Motor Rotate_Intake_And_Belt_Motor_One;
 extern pros::Motor Rotate_Intake_And_Belt_Motor_Two;
-extern pros::Motor Rotate_Outtake_Gears;
 extern pros::Motor Rotate_Matchloader;
 
 // All Pneumatics Used On The Robot Are Declared Here
-extern pros::ADIDigitalOut Descoring_Piston;
-extern pros::ADIDigitalOut Outtake_Piston_One;
-extern pros::ADIDigitalOut Outtake_Piston_Two;
+extern pros::ADIDigitalOut Descoring_Piston_Top;
+extern pros::ADIDigitalOut Descoring_Piston_Bottom;
+extern pros::ADIDigitalOut Outtake_Piston;
 
 // All Lemlib Objects Are Declared Here
 extern lemlib::Drivetrain drivetrain;
