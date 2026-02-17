@@ -9,6 +9,7 @@ void RunDriverControl()
 		int leftJoystick_Y = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
 		int rightJoystick_X = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
 
+		Descoring_Piston_Top.set_value(true); // Extends The Bottom Descoring Piston To Hold The Descoring Mechanism In The Correct Place
 		Descoring_Piston_Bottom.set_value(true); // Extends The Bottom Descoring Piston To Hold The Descoring Mechanism In The Correct Place
 
         // Uses LemLibs Arcade Drive Function To Control The Robot
@@ -37,11 +38,11 @@ void RunDriverControl()
 		// Descorering Piston Control
 		if (master.get_digital(DIGITAL_RIGHT))
 		{
-			Descoring_Piston_Top.set_value(true); // Extends The Descoring Piston
+			Descoring_Piston_Bottom.set_value(true); // Extends The Descoring Piston
 		} 
 		else if (master.get_digital(DIGITAL_DOWN)) 
 		{
-			Descoring_Piston_Top.set_value(false); // Retracts The Descoring Piston
+			Descoring_Piston_Bottom.set_value(false); // Retracts The Descoring Piston
 		}
 
 		// Matchloader Control

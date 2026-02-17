@@ -7,9 +7,13 @@
 #include "lemlib/api.hpp"
 
 // Declare All Variables Needed For Driver Control, Autonamous, And LVGL 
-extern bool autonamous_left;
-extern bool autonamous_right;
-extern bool autonamous_skills;
+
+enum AutonMode
+{
+    AUTON_LEFT,
+    AUTON_RIGHT,
+    AUTON_SKILLS
+};
 
 // All Motors Used On The Robot Are Declared Here
 extern pros::Controller master;

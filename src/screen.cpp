@@ -5,7 +5,9 @@
 #include "pros/apix.h"
 
 // THIS IS PURELY FOR INTELLISENSE, IN ORDER FOR BUIDLING TO WORK IT MUST BE COMMENTED OUT
-// #include "include/liblvgl/lvgl.h" 
+// #include "include/liblvgl/lvgl.h"
+
+AutonMode selectedAuton = AUTON_LEFT; // Variable To Store The Selected Auton Mode, Default Is AUTON_LEFT
 
 // Variables 
 char AutonResult[32]; // AutonResult Variable, Which Will Store The Selected Auton Mode As A String (Can Only Hold 32 Characters)
@@ -40,20 +42,14 @@ void EventHandler(lv_event_t * e)
         lv_label_set_text(AutonChangedLabel, LabelBuffer); // Updates The Label To Show The Selected Auton Mode
 
         // Sets Autonamous Variables Based On The Selected Auton Mode
-        if (AutonResult == "Auton Left") {
-            autonamous_left = true; // Sets The Selected Auton Mode To Auton Left
-            autonamous_right = false; // Sets Autonamous Right To False
-            autonamous_skills = false; // Sets Autonamous Skills To False
+        if (strcmp(AutonResult, "Auton Left") == 0) {
+            selectedAuton = AUTON_LEFT; // Sets The Selected Auton Mode To Auton Left
         } 
-        else if (AutonResult == "Auton Right") {
-            autonamous_left = false; // Sets Autonamous Left To False
-            autonamous_right = true; // Sets Autonamous Right To True
-            autonamous_skills = false; // Sets Autonamous Skills To False
+        else if (strcmp(AutonResult, "Auton Right") == 0) {
+            selectedAuton = AUTON_RIGHT; // Sets The Selected Auton Mode To Auton Right
         } 
-        else if (AutonResult == "Auton Skills") {
-            autonamous_left = false; // Sets Autonamous Left To False
-            autonamous_right = false; // Sets Autonamous Right To False
-            autonamous_skills = true; // Sets Autonamous Skills To True
+        else if (strcmp(AutonResult, "Auton Skills") == 0) {
+            selectedAuton = AUTON_SKILLS; // Sets The Selected Auton Mode To Auton Skills
         }
     }
 }
@@ -175,8 +171,6 @@ void UpdateScreen()
     lv_obj_add_style(Drivetrain_Temp_Label, &label_style, 0); // Adds The Label Style To The Drivetrain Temperature Label
 
 
-    pros::Task BatteryPercentageTask(BatteryPercentage); // Starts The Battery Percentage Task To Continuosely Update The Battery Arc
-    pros::Task DrivetrainTemperatureTask(DrivetrainTemperature); // Starts The Drivetrain Temperature Task To Continuosely Update The Drivetrain Temperature Arc
     InitStyles(); // Initializes All The Styles Used On The Screen
 
 }

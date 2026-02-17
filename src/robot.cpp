@@ -17,7 +17,7 @@ pros::Motor Rotate_Matchloader (5); // Creates A Motor On Port 15 Which Rotates 
 // All Pneumatics Used On The Robot Are Declared Here
 pros::ADIDigitalOut Outtake_Piston('A'); // Creates The Outtake Piston On Port A
 pros::ADIDigitalOut Descoring_Piston_Top('B'); // Creates The Descoring Piston On Port B
-pros::ADIDigitalOut Descoring_Piston_Bottom('C'); // Creates The Descoring Piston On Port C
+pros::ADIDigitalOut Descoring_Piston_Bottom('G'); // Creates The Descoring Piston On Port C
 
 pros::Imu Inertial_Sensor(1); // Creates The Inertial Sensor On Port 7
 

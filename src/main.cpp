@@ -18,6 +18,8 @@ void initialize()
 // Runs During The Autonamous Period Of The Round
 void autonomous() 
 {
+	chassis.calibrate(); // Calibrates The Inertial Sensor At The Start Of Autonamous
+	chassis.setPose(0, 0, 0); // Sets The Initial Pose Of The Robot To (0, 0) With A Heading Of 0 Degrees
 	RunSelectedAutonamous(); // Gets The Selected Autonamous And Runs It
 }
 
